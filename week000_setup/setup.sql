@@ -1,0 +1,37 @@
+USE ROLE ACCOUNTADMIN;
+
+CREATE OR REPLACE RESOURCE MONITOR rm_frosty_friday_challenges WITH CREDIT_QUOTA=1000
+   TRIGGERS ON 50 PERCENT DO NOTIFY
+            ON 75 PERCENT DO NOTIFY
+            ON 100 PERCENT DO SUSPEND
+            ON 110 PERCENT DO SUSPEND_IMMEDIATE;
+
+GRANT ALL ON RESOURCE MONITOR rm_frosty_friday_challenges TO SYSADMIN;
+
+USE ROLE SYSADMIN;
+
+CREATE OR REPLACE DATABASE FROSTY_FRIDAY;
+USE DATABASE FROSTY_FRIDAY;
+-- A Database is necessary to create a tag
+CREATE TAG cost_center
+    allowed_values 'frosty_friday_challenges', 'experiments';
+
+-- Sysadmin has insufficient rights to create warehouse
+CREATE OR REPLACE WAREHOUSE WH_ETL_XS
+WITH 
+WAREHOUSE_TYPE = STANDARD
+WAREHOUSE_SIZE = XSMALL
+MAX_CLUSTER_COUNT = 1
+MIN_CLUSTER_COUNT = 1
+SCALING_POLICY = STANDARD
+AUTO_SUSPEND = 30
+AUTO_RESUME = TRUE
+INITIALLY_SUSPENDED = TRUE
+RESOURCE_MONITOR = rm_frosty_friday_challenges
+COMMENT = 'Usage mainly for simple ETL related tasks'
+ENABLE_QUERY_ACCELERATION = FALSE
+QUERY_ACCELERATION_MAX_SCALE_FACTOR = 0
+TAG (cost_center = 'frosty_friday_challenges')
+;
+
+ALTER WAREHOUSE WH_ETL_XS SET RESOURCE_MONITOR = rm_frosty_friday_challenges;
