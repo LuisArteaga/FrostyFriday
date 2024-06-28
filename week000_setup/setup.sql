@@ -12,7 +12,8 @@ USE ROLE SYSADMIN;
 
 CREATE OR REPLACE DATABASE FROSTY_FRIDAY;
 USE DATABASE FROSTY_FRIDAY;
--- A Database is necessary to create a tag
+USE SCHEMA PUBLIC;
+
 CREATE TAG cost_center
     allowed_values 'frosty_friday_challenges', 'experiments';
 
@@ -33,5 +34,3 @@ ENABLE_QUERY_ACCELERATION = FALSE
 QUERY_ACCELERATION_MAX_SCALE_FACTOR = 0
 TAG (cost_center = 'frosty_friday_challenges')
 ;
-
-ALTER WAREHOUSE WH_ETL_XS SET RESOURCE_MONITOR = rm_frosty_friday_challenges;
