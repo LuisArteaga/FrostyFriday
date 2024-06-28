@@ -15,4 +15,8 @@ for key, value in CONNECTION_PARAMETERS.items():
 
 sfSession = sessionBuilder.create()
 
-print(sfSession)
+# Can execute only one statement
+
+with open("week000_setup/setup.sql", "r") as f:
+    statement_count = f.read().count(';')
+    print(sfSession.sql(f.read()).collect())
