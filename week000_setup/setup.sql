@@ -14,7 +14,7 @@ CREATE OR REPLACE DATABASE FROSTY_FRIDAY;
 USE DATABASE FROSTY_FRIDAY;
 USE SCHEMA PUBLIC;
 
-CREATE TAG cost_center
+CREATE OR REPLACE TAG cost_center
     allowed_values 'frosty_friday_challenges', 'experiments';
 
 USE ROLE ACCOUNTADMIN;
