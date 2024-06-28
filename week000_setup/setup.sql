@@ -17,7 +17,7 @@ USE SCHEMA PUBLIC;
 CREATE TAG cost_center
     allowed_values 'frosty_friday_challenges', 'experiments';
 
--- Sysadmin has insufficient rights to create warehouse
+USE ROLE ACCOUNTADMIN;
 CREATE OR REPLACE WAREHOUSE WH_ETL_XS
 WITH 
 WAREHOUSE_TYPE = STANDARD
@@ -34,3 +34,4 @@ ENABLE_QUERY_ACCELERATION = FALSE
 QUERY_ACCELERATION_MAX_SCALE_FACTOR = 0
 TAG (cost_center = 'frosty_friday_challenges')
 ;
+GRANT ALL ON WAREHOUSE WH_ETL_XS TO SYSADMIN;
